@@ -12,7 +12,9 @@
           "admin.html",
           "admin.css",
           "admin.js",
-          "admin-login.html"
+          "admin-login.html",
+          "admin-login.css",
+          "admin-login.js"
         ]
       }
     }
