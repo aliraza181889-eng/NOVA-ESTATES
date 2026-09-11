@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NOVA ESTATES — Admin Dashboard</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="admin-header">
+
+        <div class="brand">
+            <div class="brand-icon">⌂</div>
+
+            <div>
+                <div class="brand-name">NOVA ESTATES</div>
+                <div class="brand-subtitle">
+                    PREMIUM PROPERTIES | BETTER LIVING
+                </div>
+            </div>
+        </div>
+
+        <a href="/" class="back-button">
+            ← &nbsp; Back to Website
+        </a>
+
+<button class="logout-button" onclick="logoutAdmin()">
+    Logout
+</button>
+
+    </header>
+
+
+    <!-- HERO / DASHBOARD -->
+    <main class="admin-container">
+
+        <section class="dashboard-hero">
+
+            <div class="hero-content">
+
+                <span class="section-label">
+                    ADMIN DASHBOARD
+                </span>
+
+                <h1>
+                    Contact Messages
+                </h1>
+
+                <p>
+                    Manage and review all client inquiries from your website.
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-actions">
+
+    <div class="stats-grid">
+
+        <div class="stat-box">
+            <div class="stat-icon">✉</div>
+            <div>
+                <span>Total Requests</span>
+                <strong id="totalContacts">0</strong>
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon">◷</div>
+            <div>
+                <span>Today</span>
+                <strong id="todayContacts">0</strong>
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon">▣</div>
+            <div>
+                <span>This Week</span>
+                <strong id="weekContacts">0</strong>
+            </div>
+        </div>
+    
+        <div class="stat-box">
+    <div class="stat-icon">●</div>
+    <div>
+        <span>New Requests</span>
+        <strong id="newContacts">0</strong>
+    </div>
+</div>
+
+<div class="stat-box">
+    <div class="stat-icon">◷</div>
+    <div>
+        <span>In Progress</span>
+        <strong id="progressContacts">0</strong>
+    </div>
+</div>
+
+<div class="stat-box">
+    <div class="stat-icon">✓</div>
+    <div>
+        <span>Completed</span>
+        <strong id="completedContacts">0</strong>
+    </div>
+</div>
+
+    </div>
+
+    <button
+        class="refresh-button"
+        onclick="loadContacts()"
+    >
+        ↻ &nbsp; Refresh
+    </button>
+
+</div>
+
+        </section>
+
+<div class="contact-tools">
+
+    <div class="search-box">
+        <span>⌕</span>
+        <input
+            type="text"
+            id="contactSearch"
+            placeholder="Search by name, email or subject..."
+        >
+    </div>
+
+    <select id="contactFilter">
+        <option value="all">All Requests</option>
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+    </select>
+
+</div>
+
+
+<section class="property-section">
+
+    <div class="property-section-header">
+
+        <div>
+            <span class="section-label">
+                PROPERTY MANAGEMENT
+            </span>
+
+            <h2>
+                Properties
+            </h2>
+        </div>
+
+        <button
+            class="add-property-button"
+            onclick="openPropertyForm()"
+        >
+             Add Property
+        </button>
+
+    </div>
+
+    <div
+        id="propertiesContainer"
+        class="properties-container"
+    >
+
+        <p class="loading">
+            Loading properties...
+        </p>
+
+    </div>
+
+</section>
+
+
+        <!-- CONTACTS -->
+        <div
+            id="contactsContainer"
+            class="contacts-container"
+        >
+
+            <p class="loading">
+                Loading contact requests...
+            </p>
+
+        </div>
+
+    </main>
+
+    <div id="messageModal" class="message-modal">
+
+    <div class="message-modal-overlay"
+         onclick="closeMessage()">
+    </div>
+
+    <div class="message-modal-card">
+
+        <button
+            class="modal-close"
+            onclick="closeMessage()"
+        >
+            ×
+        </button>
+
+        <span class="section-label">
+            CONTACT REQUEST
+        </span>
+
+        <h2 id="modalName">—</h2>
+
+        <div class="modal-details">
+
+            <div>
+                <span>Email</span>
+                <strong id="modalEmail">—</strong>
+            </div>
+
+            <div>
+                <span>Phone</span>
+                <strong id="modalPhone">—</strong>
+            </div>
+
+            <div>
+                <span>Subject</span>
+                <strong id="modalSubject">—</strong>
+            </div>
+
+            <div>
+                <span>Date</span>
+                <strong id="modalDate">—</strong>
+            </div>
+
+        </div>
+
+        <div class="modal-message">
+            <span>Message</span>
+            <p id="modalMessage">—</p>
+        </div>
+
+    </div>
+
+</div>
+
+<div
+    id="propertyModal"
+    class="property-modal"
+>
+
+    <div
+        class="property-modal-overlay"
+        onclick="closePropertyForm()"
+    ></div>
+
+
+    <div class="property-modal-card">
+
+        <button
+            class="modal-close"
+            onclick="closePropertyForm()"
+        >
+            ×
+        </button>
+
+
+        <span class="section-label">
+            PROPERTY MANAGEMENT
+        </span>
+
+        <h2>
+            Add Property
+        </h2>
+
+
+        <form id="propertyForm">
+
+            <div class="property-form-grid">
+
+                <div class="property-input-group">
+
+                    <label>
+                        Property Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyName"
+                        placeholder="Luxury Villa"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="property-input-group">
+
+                    <label>
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyLocation"
+                        placeholder="Islamabad, Pakistan"
+                        required
+                    >
+
+                </div>
+                
+
+                <div class="property-input-group">
+
+    <label>
+        Property Type
+    </label>
+
+    <select id="propertyType" class="property-type-select" required>
+    <option value="House">House</option>
+    <option value="Apartment">Apartment</option>
+    <option value="Villa">Villa</option>
+    <option value="Office">Office</option>
+</select>
+
+</div>
+
+   <div class="property-input-group">
+    <label>Square Feet</label>
+    <input
+        type="number"
+        id="propertySqft"
+        placeholder="2500"
+        min="0"
+    >
+</div>
+
+<div class="property-input-group">
+    <label>Description</label>
+    <textarea
+        id="propertyDescription"
+        placeholder="Describe this property..."
+        rows="4"
+    ></textarea>
+</div>
+
+                <div class="property-input-group">
+
+                    <label>
+                        Price
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyPrice"
+                        placeholder="$850,000"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="property-input-group">
+
+                    <label>
+                        Bedrooms
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertyBedrooms"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+
+                <div class="property-input-group">
+
+                    <label>
+                        Bathrooms
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertyBathrooms"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+
+                <div class="property-input-group">
+
+                    <label>
+                        Image URL
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyImage"
+                        placeholder="https://..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <label class="featured-checkbox">
+
+                <input
+                    type="checkbox"
+                    id="propertyFeatured"
+                >
+
+                <span>
+                    Featured Property
+                </span>
+
+            </label>
+
+
+            <button
+                type="submit"
+                class="save-property-button"
+            >
+                Add Property
+            </button>
+
+
+            <div
+                id="propertyMessage"
+                class="property-message"
+            ></div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<script src="admin.js" defer></script>
+
+</body>
+</html>

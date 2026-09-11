@@ -1,0 +1,4 @@
+node_modules/
+nova-estates.db
+.env
+*.log
